@@ -9,6 +9,7 @@ import { useEffect } from "react"
 import StreamLinedExperience from "../components/StreamLinedExperience"
 import Square from "../components/Square"
 import AnimatedSquare from "../components/AnimatedSquare"
+import AnimatedCircle from "../components/AnimatedCircle"
 
 export default function Home() {
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function Home() {
         <StreamLinedExperience />
         {/* <ScrollText /> */}
         {/* <Square /> */}
-        <AnimatedSquare />
+        <AnimatedCircle />
       </MaxWidthWrapper>
     </>
   )
