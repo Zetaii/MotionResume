@@ -18,7 +18,7 @@ const Hero = () => {
     <motion.section
       style={{ opacity }}
       ref={targetRef}
-      className="relative mb-[2rem] h-[60vh] py-12 mt-12 text-white"
+      className="relative mb-[2rem] h-[90vh] py-12 mt-12 text-white"
     >
       <div className="h-[200vh] mt-8">
         <h1 className="text-center text-6xl">
