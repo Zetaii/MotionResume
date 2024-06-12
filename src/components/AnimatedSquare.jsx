@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
+import React, { useRef } from "react"
+import { useMotionValueEvent, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 
 const AnimatedSquare = () => {
   const targetRef = useRef(null)
@@ -9,64 +9,71 @@ const AnimatedSquare = () => {
     offset: ["start end", "end end"],
   })
 
-  // Opacity transformation based on scroll position
   const opacitySection = useTransform(
     scrollYProgress,
-    [0.1, 0.2, 0.9, 1], // Scroll position range
-    [0, 1, 1, 0] // Opacity range for fade in and fade out
+    [0, 0.7, 0.725],
+    [0, 0, 1]
   )
 
-  // Scale animation based on scroll position
-  const scale = useTransform(
+  const opacityBorder = useTransform(
     scrollYProgress,
-    [0, 0.2, 0.9, 1], // Scroll position range for scaling animation
-    [1, 2, 2, 0] // Scale range
+    [0.7, 0.86],
+    ["rgba(225, 0, 0, 1)", "rgba(225, 0, 0, 0)"]
   )
 
-  // Move animation based on scroll position
-  const xPosition = useTransform(
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest >= 0.4) {
+      console.log("Split", latest)
+    } else {
+      console.log("Split", latest)
+    }
+  })
+
+  const widthScale = useTransform(
     scrollYProgress,
-    [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1], // Start moving after scaling is complete
-    ["0%", "250%", "250%", "250%", "250%", "-400%", "-400%"] // Move to the right
-  )
-  const yPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1], // Start moving after scaling is complete
-    ["0%", "-300%", "-300%", "325%", "325%", "0%", "0%"] // Move up
+    [0.7, 0.83, 0.9],
+    ["2px", "100%", "300%"]
   )
 
-  const borderPosition = useTransform(
+  const marginTop = useTransform(
     scrollYProgress,
-    [0.25, 0.5, 0.95, 1], // Start moving after scaling is complete
-    [
-      "0.2rem solid rgba(0, 255, 128, 0.5)",
-      "0.2rem solid rgba(0, 255, 128, 0.5)",
-      "0.2rem solid rgba(0, 0, 225, 0.5)",
-      "0.2rem solid rgba(0, 0, 225, 0.5)",
-    ] // Move up
+    [0.7, 0.9, 0.925],
+    ["45%", "-20%", "-100%"] // Adjust to match the height growth
   )
+
+  const heightScale = useTransform(
+    scrollYProgress,
+    [0.7, 0.9, 0.925],
+    ["1px", "20%", "100%"]
+  )
+  const scale = useTransform(scrollYProgress, [0.9, 1], [1, 10])
 
   return (
     <motion.section
-      style={{
-        opacity: opacitySection,
-      }}
+      className="flex text-white justify-center absolute -top-[55vh] left-[0%] w-[100%] h-[700vh]"
       ref={targetRef}
-      className="mt-[1vh] flex h-[300vh] items-start justify-start"
     >
-      <motion.div className="sticky top-[38%] left-[40%] text-4xl" style={{}}>
-        I'm a Frontend Developer
-      </motion.div>
-
       <motion.div
-        className="sticky top-[38%] left-[45%] min-h-[12rem] min-w-[12rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        className="sticky text-4xl bg-black text-white"
         style={{
-          scale: scale,
-          x: xPosition,
-          y: yPosition,
-          border: borderPosition,
+          opacity: opacitySection,
+          width: widthScale,
+          height: heightScale,
+          top: marginTop,
+          border: "1px solid",
+          borderColor: opacityBorder,
         }}
-      />
+      >
+        {/* <h1 className=""> I'm a Frontend Developer</h1> */}
+      </motion.div>
+      {/* <motion.div
+        className="bg-black text-white w-[50%] h-[100%]"
+        style={{
+          opacity: opacitySection,
+        }}
+      >
+        Test
+      </motion.div> */}
     </motion.section>
   )
 }
