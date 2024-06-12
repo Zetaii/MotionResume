@@ -7,6 +7,7 @@ import {
   useMotionValueEvent,
 } from "framer-motion"
 import { useRef } from "react"
+import AnimatedSquare from "./AnimatedSquare"
 
 const AnimatedCircle = () => {
   const targetRef = useRef(null)
@@ -332,9 +333,9 @@ const AnimatedCircle = () => {
       ref={targetRef}
       className=" flex h-[400vh] items-start justify-start"
     >
-      <motion.div className="sticky top-[38%]  left-[40%] text-4xl" style={{}}>
+      {/* <motion.div className="sticky top-[38%]  left-[40%] text-4xl" style={{}}>
         <h1 className=""> I'm a Frontend Developer</h1>
-      </motion.div>
+      </motion.div> */}
 
       <motion.div
         className="sticky top-[38%] left-[45%] -translate-x-1/2 -translate-y-1/2 rounded-full"
@@ -399,7 +400,7 @@ const AnimatedCircle = () => {
           <motion.div
             className="sticky top-[38%] left-[45%] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={splitCircle12}
-          />
+          />{" "}
           <motion.div
             className="sticky top-[38%] left-[45%] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={splitCircle13}
