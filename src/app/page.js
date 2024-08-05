@@ -40,8 +40,12 @@ export default function Home() {
       </section>
       <StickyText3 />
       {/* <Demo /> */}
-      <Footer />
-      <Contact />
+      <section id="skills">
+        <Footer />
+      </section>
+      <section id="contact">
+        <Contact />
+      </section>
     </>
   )
 }
