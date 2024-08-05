@@ -38,7 +38,11 @@ const HorizontalScrollCarousel = () => {
   const x = useTransform(scrollYProgress, [0.05, 1], ["0%", "-65%"])
 
   return (
-    <section ref={targetRef} className="relative h-[300vh]  bg-white">
+    <section
+      ref={targetRef}
+      id="projects"
+      className="relative h-[300vh]  bg-white"
+    >
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         <motion.div style={{ x }} className="flex  ">
           <div>
@@ -115,7 +119,9 @@ const HorizontalScrollCarousel = () => {
                   Movie Explorer
                 </h1>
                 <button className="bg-white text-black font-black w-24 h-24 border-black rounded-full ml-9">
-                  Check Out
+                  <Link href="https://moviesite-jade-gamma.vercel.app/">
+                    Check Out
+                  </Link>
                 </button>
               </div>
             </div>

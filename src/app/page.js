@@ -10,10 +10,9 @@ import Navbar2 from "../components/Navbar2"
 import StickyText2 from "../components/StickyText2"
 import StickyText3 from "../components/StickyText3"
 
-import Demo from "../components/Demo"
 import Footer from "../components/Footer"
 import ScrollBox from "../components/HorizontalTest"
-
+import Contact from "../components/Contact"
 export default function Home() {
   useEffect(() => {
     const lenis = new Lenis()
@@ -27,19 +26,22 @@ export default function Home() {
   }, [])
   return (
     <>
-      {/* <Navbar /> */}
       <Navbar2 />
 
-      <HeroTest />
+      <section id="home">
+        <HeroTest />
+      </section>
 
-      {/* <AnimatedCircle /> */}
       <StickyText />
-      <ScrollBox />
-      <StickyText2 />
-      <ZoomParallax />
+      <section id="projects">
+        <ScrollBox />
+        <StickyText2 />
+        <ZoomParallax />
+      </section>
       <StickyText3 />
       {/* <Demo /> */}
       <Footer />
+      <Contact />
     </>
   )
 }

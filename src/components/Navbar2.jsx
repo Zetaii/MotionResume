@@ -70,13 +70,19 @@ const SlideTabs = () => {
         <div className="mt-1 text-4xl font-black mr-32"> ZETAI </div>
       </div>
 
-      <Tab setPosition={setPosition}>Home</Tab>
-      <Tab setPosition={setPosition}>Projects</Tab>
-      <Tab setPosition={setPosition}>Resume</Tab>
-      <Tab setPosition={setPosition}>Contact</Tab>
-
+      <Tab setPosition={setPosition} href="#home">
+        Home
+      </Tab>
+      <Tab setPosition={setPosition} href="#projects">
+        Projects
+      </Tab>
+      <Tab setPosition={setPosition} href="#resume">
+        Contact
+      </Tab>
+      <Tab setPosition={setPosition} href="#contact">
+        Skills
+      </Tab>
       <Cursor position={position} />
-
       <div className="ml-32">
         <img src="/GitHubSVG.svg" alt="github" width={50} height={20} />
       </div>
@@ -84,8 +90,16 @@ const SlideTabs = () => {
   )
 }
 
-const Tab = ({ children, setPosition }) => {
+const Tab = ({ children, setPosition, href }) => {
   const ref = useRef(null)
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    const element = document.querySelector(href)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
 
   return (
     <li
@@ -103,7 +117,9 @@ const Tab = ({ children, setPosition }) => {
       }}
       className="relative z-50 block cursor-pointer px-12 py-1.5 text-xl uppercase text-white mix-blend-difference md:text-2xl md:uppercase md:font-bold md:tracking-widest md:leading-10  md:transition-all md:duration-300 md:ease-in-out  md:hover:rounded-full md:hover:shadow-lg  md:hover:transform  md:hover:scale-105"
     >
-      {children}
+      <a href={href} onClick={handleClick}>
+        {children}
+      </a>
     </li>
   )
 }

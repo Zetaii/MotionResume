@@ -38,13 +38,11 @@ const Description = () => {
   return (
     <h2 className="mt-8 md:mt-0 md:ml-8 overflow-hidden w-full md:w-1/2 lg:w-2/5 text-base sm:text-lg md:text-xl text-center">
       Thanks for taking the time to checkout my web resume! I'm a web developer
-      based in the US. I build web applications using modern technologies. Feel
-      free to check out my work. I'm a web developer based in the US. I build
-      web applications using modern technologies. Feel free to check out my
-      work. I'm a web developer based in the US. I build web applications using
-      modern technologies. Feel free to check out my work. I'm a web developer
-      based in the US. I build web applications using modern technologies. Feel
-      free to check out my work.
+      based in the US. I have a background in biochemistry, but have since moved
+      to software development. I've been focusing on frontend development, but
+      have recently been expanding my skills to include cloud computing and
+      backend. Feel free to reach out to me if you have any questions or would
+      like to work together!
     </h2>
   )
 }
@@ -56,15 +54,16 @@ const Nav = () => {
         <h3 className="mb-2 uppercase text-[#ffffff80]">About</h3>
         <p>Home</p>
         <p>Projects</p>
-        <p>Our Mission</p>
-        <p>Contact Us</p>
+        <p>My Objective</p>
+        <p>Contact Me</p>
       </div>
       <div className="flex flex-col gap-2">
-        <h3 className="mb-2 uppercase text-[#ffffff80]">Education</h3>
-        <p>News</p>
-        <p>Learn</p>
-        <p>Certification</p>
-        <p>Publications</p>
+        <h3 className="mb-2 uppercase text-[#ffffff80]">Skills</h3>
+        <p> HTML/CSS </p>
+        <p> JavaScript/Typescript</p>
+        <p>Cloud Computing (WIP) </p>
+        <p> React / NextJS</p>
+        <p> Python (WIP) </p>
       </div>
     </div>
   )
