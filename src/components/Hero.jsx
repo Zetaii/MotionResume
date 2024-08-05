@@ -18,7 +18,7 @@ const Hero = () => {
     <motion.section
       style={{ opacity }}
       ref={targetRef}
-      className="relative mb-[2rem] h-[90vh] py-12 mt-12 text-white"
+      className="relative mb-[2rem] h-[80vh] py-12 mt-12 text-white"
     >
       <div className="h-[200vh] mt-8">
         <h1 className="text-center text-6xl">
@@ -30,7 +30,9 @@ const Hero = () => {
             <span className="ml-2">developer</span>
           </div>
         </h1>
+        <div>Test</div>
       </div>
+      <div>Test </div>
     </motion.section>
   )
 }

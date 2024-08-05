@@ -1,9 +1,16 @@
 import React, { useRef } from "react"
-import { useMotionValueEvent, useScroll, useTransform } from "framer-motion"
+import {
+  useInView,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion"
 import { motion } from "framer-motion"
 
 const AnimatedSquare = () => {
   const targetRef = useRef(null)
+  const textRef = useRef(null)
+  const inView = useInView(targetRef)
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start end", "end end"],
@@ -29,6 +36,8 @@ const AnimatedSquare = () => {
     }
   })
 
+  const textOpacity = useTransform(scrollYProgress, [0.2, 0.8, 0.85], [1, 1, 0])
+
   const widthScale = useTransform(
     scrollYProgress,
     [0.7, 0.83, 0.9],
@@ -50,11 +59,11 @@ const AnimatedSquare = () => {
 
   return (
     <motion.section
-      className="flex text-white justify-center absolute -top-[55vh] left-[0%] w-[100%] h-[700vh]"
+      className="flex text-white justify-center absolute -top-[55vh] left-[0%] w-[100%] h-[650vh] overflow-visible"
       ref={targetRef}
     >
       <motion.div
-        className="sticky text-4xl bg-black text-white"
+        className="sticky text-4xl bg-black text-white justify-center items-center flex  "
         style={{
           opacity: opacitySection,
           width: widthScale,
@@ -64,16 +73,27 @@ const AnimatedSquare = () => {
           borderColor: opacityBorder,
         }}
       >
-        {/* <h1 className=""> I'm a Frontend Developer</h1> */}
+        <motion.div
+          style={{}}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1.5, delay: 0 }}
+          viewport={0.5}
+        >
+          <motion.h1
+            className="h-[20vh] min-w-96 text-center flex justify-center items-center"
+            ref={targetRef}
+            style={{}}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false }}
+            transition={{ duration: 1.5, delay: 1 }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
+            }}
+          ></motion.h1>
+        </motion.div>
       </motion.div>
-      {/* <motion.div
-        className="bg-black text-white w-[50%] h-[100%]"
-        style={{
-          opacity: opacitySection,
-        }}
-      >
-        Test
-      </motion.div> */}
     </motion.section>
   )
 }
