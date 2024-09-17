@@ -1,8 +1,10 @@
 import React, { useRef, useState } from "react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
+import { FiMenu } from "react-icons/fi"
 
 const Navbar2 = () => {
   const [isHidden, setIsHidden] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   const lastYRef = useRef(0)
 
@@ -10,7 +12,6 @@ const Navbar2 = () => {
     const difference = y - lastYRef.current
     if (Math.abs(difference) > 50) {
       setIsHidden(difference > 0)
-
       lastYRef.current = y
     }
   })
@@ -19,22 +20,45 @@ const Navbar2 = () => {
     <>
       <motion.div
         animate={isHidden ? "hidden" : "visible"}
-        whileHover="visible"
-        onFocusCapture={() => setIsHidden(false)}
         variants={{
           hidden: {
-            y: "-62%",
+            y: "-100%",
           },
           visible: {
             y: "0%",
           },
         }}
         transition={{ duration: 0.3 }}
-        className="fixed top-0 z-10 flex w-full justify-center pt-3"
+        className="fixed top-0 z-10 w-full bg-black bg-opacity-80 backdrop-filter backdrop-blur-lg"
       >
-        <div className=" text-xl py-4 z-50">
-          <SlideTabs />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <img src="/logo.svg" alt="ninja" className="h-8 w-8 mr-2" />
+              <span className="text-white text-2xl font-bold">ZETAI</span>
+            </div>
+            {/* Desktop Menu */}
+            <div className="hidden md:flex space-x-8">
+              <SlideTabs />
+            </div>
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-white focus:outline-none"
+              >
+                <FiMenu size={24} />
+              </button>
+            </div>
+          </div>
         </div>
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden">
+            <SlideTabs isMobile />
+          </div>
+        )}
       </motion.div>
     </>
   )
@@ -42,7 +66,7 @@ const Navbar2 = () => {
 
 export default Navbar2
 
-const SlideTabs = () => {
+const SlideTabs = ({ isMobile = false }) => {
   const [position, setPosition] = useState({
     left: 0,
     width: 0,
@@ -57,40 +81,39 @@ const SlideTabs = () => {
           opacity: 0,
         }))
       }}
-      className="relative mx-auto flex w-fit rounded-full text-xl border-4 border-white bg-black py-4 px-12"
+      className={`relative flex ${
+        isMobile ? "flex-col" : "space-x-8"
+      } items-center`}
     >
-      <div className="flex">
-        <img
-          src="/logo.svg"
-          alt="ninja"
-          width={60}
-          height={0}
-          className="mr-3 -mt-1"
-        />
-        <div className="mt-1 text-4xl font-black mr-32"> ZETAI </div>
-      </div>
-
-      <Tab setPosition={setPosition} href="#home">
-        Home
-      </Tab>
-      <Tab setPosition={setPosition} href="#projects">
-        Projects
-      </Tab>
-      <Tab setPosition={setPosition} href="#skills">
-        Skills
-      </Tab>
-      <Tab setPosition={setPosition} href="#contact">
-        Contact
-      </Tab>
-      <Cursor position={position} />
-      <div className="ml-32">
-        <img src="/GitHubSVG.svg" alt="github" width={50} height={20} />
-      </div>
+      {/* Navigation Links */}
+      {["Home", "Projects", "Skills", "Contact"].map((item, index) => (
+        <Tab
+          key={index}
+          setPosition={setPosition}
+          href={`#${item.toLowerCase()}`}
+          isMobile={isMobile}
+        >
+          {item}
+        </Tab>
+      ))}
+      {!isMobile && <Cursor position={position} />}
+      {/* GitHub Icon */}
+      {!isMobile && (
+        <li className="ml-8">
+          <a
+            href="https://github.com/yourusername"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/GitHubSVG.svg" alt="GitHub" className="h-6 w-6" />
+          </a>
+        </li>
+      )}
     </ul>
   )
 }
 
-const Tab = ({ children, setPosition, href }) => {
+const Tab = ({ children, setPosition, href, isMobile }) => {
   const ref = useRef(null)
 
   const handleClick = (e) => {
@@ -105,19 +128,21 @@ const Tab = ({ children, setPosition, href }) => {
     <li
       ref={ref}
       onMouseEnter={() => {
-        if (!ref?.current) return
-
+        if (!ref?.current || isMobile) return
         const { width } = ref.current.getBoundingClientRect()
-
         setPosition({
           left: ref.current.offsetLeft,
           width,
           opacity: 1,
         })
       }}
-      className="relative z-50 block cursor-pointer px-12 py-1.5 text-xl uppercase text-white mix-blend-difference md:text-2xl md:uppercase md:font-bold md:tracking-widest md:leading-10  md:transition-all md:duration-300 md:ease-in-out  md:hover:rounded-full md:hover:shadow-lg  md:hover:transform  md:hover:scale-105"
+      className={`relative z-50 ${isMobile ? "py-2" : "py-1.5"} cursor-pointer`}
     >
-      <a href={href} onClick={handleClick}>
+      <a
+        href={href}
+        onClick={handleClick}
+        className="text-white text-lg font-medium hover:text-gray-300"
+      >
         {children}
       </a>
     </li>
@@ -126,11 +151,14 @@ const Tab = ({ children, setPosition, href }) => {
 
 const Cursor = ({ position }) => {
   return (
-    <motion.li
+    <motion.div
       animate={{
-        ...position,
+        left: position.left,
+        width: position.width,
+        opacity: position.opacity,
       }}
-      className="absolute z-0 h-7 rounded-full bg-white md:h-12"
+      transition={{ duration: 0.2 }}
+      className="absolute bottom-0 h-0.5 bg-white"
     />
   )
 }

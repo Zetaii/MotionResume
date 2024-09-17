@@ -1,11 +1,10 @@
 import { motion, useTransform, useScroll } from "framer-motion"
-import { useMotionValueEvent } from "framer-motion"
+import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
-import { useRef } from "react"
 
 const ScrollBox = () => {
   return (
-    <div className="bg-white ">
+    <div className="bg-white">
       <HorizontalScrollCarousel />
     </div>
   )
@@ -13,122 +12,123 @@ const ScrollBox = () => {
 
 const HorizontalScrollCarousel = () => {
   const targetRef = useRef(null)
+  const [containerWidth, setContainerWidth] = useState(0)
+  const [windowWidth, setWindowWidth] = useState(0)
+  const containerRef = useRef(null)
+
+  useEffect(() => {
+    const updateWidths = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.scrollWidth)
+      }
+      setWindowWidth(window.innerWidth)
+    }
+
+    updateWidths()
+    window.addEventListener("resize", updateWidths)
+    return () => window.removeEventListener("resize", updateWidths)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: targetRef,
+    offset: ["start start", "end end"],
   })
 
-  const widthOneScale = useTransform(
+  const x = useTransform(
     scrollYProgress,
-    [0.1, 0.15, 0.32],
-    ["50%", "75%", "100%"]
+    [0, 1],
+    [0, -(containerWidth - windowWidth)]
   )
 
-  const widthTwoScale = useTransform(
-    scrollYProgress,
-    [0.35, 0.5, 0.65],
-    ["50%", "75%", "100%"]
-  )
-
-  const widthThreeScale = useTransform(
-    scrollYProgress,
-    [0.35, 0.75, 0.9],
-    ["50%", "75%", "100%"]
-  )
-
-  const x = useTransform(scrollYProgress, [0.05, 1], ["0%", "-65%"])
+  const totalSections = 4 // Intro + 3 projects
+  const sectionHeight = windowWidth ? (containerWidth / windowWidth) * 100 : 0
 
   return (
     <section
       ref={targetRef}
       id="projects"
-      className="relative h-[300vh]  bg-white"
+      className="relative bg-white"
+      style={{ height: `${sectionHeight}vh` }}
     >
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        <motion.div style={{ x }} className="flex  ">
-          <div>
-            <div className="relative h-[100vh] w-[55vw]  bg-white">
-              <motion.div className="h-full bg-white-200 text-black text-center justify-center flex items-center ">
-                <div>
-                  Projects
-                  <div></div>
-                  <h1 className="text-black text-9xl font-black"> ZETAI </h1>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-          <div className="bg-black w-[70vw]">
-            <motion.div
-              className=" h-[45vh] text-center items-center flex justify-center"
-              style={{
-                backgroundImage: `url(/cloudcostmanagement.png)`,
-                backgroundSize: "100% 100% ",
-                backgroundRepeat: "no-repeat",
-                scale: widthOneScale,
-              }}
-            ></motion.div>
-
-            <div className="bg-black h-[55vh] text-center items-center flex justify-center">
-              <h1 className="text-7xl text-white font-black">
-                Cloud Cost Management
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <motion.div ref={containerRef} style={{ x }} className="flex">
+          {/* Intro Section */}
+          <div className="flex-shrink-0 w-screen flex items-center justify-center bg-white">
+            <div className="text-center px-4">
+              <h2 className="text-4xl md:text-6xl font-bold text-black mb-4">
+                Projects
+              </h2>
+              <h1 className="text-6xl md:text-9xl font-black text-black">
+                ZETAI
               </h1>
-              <button className="bg-white text-black font-black w-24 h-24 border-black rounded-full ml-9">
-                <Link href="https://cloud-cost-frontend.vercel.app/">
-                  Check Out
-                </Link>
-              </button>
             </div>
           </div>
 
-          <div className="bg-white w-[70vw]">
-            <motion.div
-              className=" h-[45vh] text-center items-center flex justify-center"
-              style={{
-                backgroundImage: `url(/modernanalytics.png)`,
-                backgroundSize: "100% 100% ",
-                backgroundRepeat: "no-repeat",
-                scale: widthTwoScale,
-              }}
-            ></motion.div>
+          {/* Project 1 */}
+          <ProjectCard
+            title="Cloud Cost Management"
+            imageUrl="/cloudcostmanagement.png"
+            link="https://cloud-cost-frontend.vercel.app/"
+            bgColor="bg-black"
+            textColor="text-white"
+          />
 
-            <div className="bg-white h-[55vh] text-center items-center flex justify-center">
-              <h1 className="text-7xl text-black font-black">
-                Modern Analytics
-              </h1>
-              <button className="bg-black w-24 h-24 border-black rounded-full ml-9">
-                <Link href="https://modernanalytics.vercel.app/">
-                  Check Out
-                </Link>
-              </button>
-            </div>
-          </div>
+          {/* Project 2 */}
+          <ProjectCard
+            title="Modern Analytics"
+            imageUrl="/modernanalytics.png"
+            link="https://modernanalytics.vercel.app/"
+            bgColor="bg-white"
+            textColor="text-black"
+          />
 
-          <div>
-            <div className="bg-black w-[110vw]">
-              <motion.div
-                className=" h-[45vh] text-center items-center flex justify-center"
-                style={{
-                  backgroundImage: `url(/moviexplorer.jpg)`,
-                  backgroundSize: "100% 100% ",
-                  backgroundRepeat: "no-repeat",
-                  scale: widthThreeScale,
-                }}
-              ></motion.div>
-
-              <div className="bg-black h-[55vh] text-center items-center flex justify-center">
-                <h1 className="text-7xl text-white font-black">
-                  Movie Explorer
-                </h1>
-                <button className="bg-white text-black font-black w-24 h-24 border-black rounded-full ml-9">
-                  <Link href="https://moviesite-jade-gamma.vercel.app/">
-                    Check Out
-                  </Link>
-                </button>
-              </div>
-            </div>
-          </div>
+          {/* Project 3 */}
+          <ProjectCard
+            title="Movie Explorer"
+            imageUrl="/moviexplorer.jpg"
+            link="https://moviesite-jade-gamma.vercel.app/"
+            bgColor="bg-black"
+            textColor="text-white"
+          />
         </motion.div>
       </div>
     </section>
+  )
+}
+
+const ProjectCard = ({ title, imageUrl, link, bgColor, textColor }) => {
+  return (
+    <div className={`flex-shrink-0 w-screen ${bgColor}`}>
+      {/* Image Section */}
+      <div
+        className="h-[50vh] md:h-[60vh] bg-cover bg-center flex items-center justify-center"
+        style={{
+          backgroundImage: `url(${imageUrl})`,
+        }}
+      ></div>
+
+      {/* Text Section */}
+      <div
+        className={`h-[50vh] md:h-[40vh] flex flex-col items-center justify-center ${bgColor}`}
+      >
+        <h1 className={`text-3xl md:text-5xl font-bold ${textColor} mb-6`}>
+          {title}
+        </h1>
+        <Link
+          href={link}
+          passHref
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`px-8 py-4 rounded-full font-semibold ${
+            textColor === "text-white"
+              ? "bg-white text-black"
+              : "bg-black text-white"
+          }`}
+        >
+          Check Out
+        </Link>
+      </div>
+    </div>
   )
 }
 

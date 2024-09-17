@@ -3,9 +3,9 @@ import { motion, useInView, useAnimation } from "framer-motion"
 import { useEffect, useRef } from "react"
 import { TextReveal } from "./TextReveal"
 
-export default function FooterContent() {
+export default function StickyTextContent2() {
   return (
-    <div className="bg-blue py-8 px-12 h-[80vh] w-full flex flex-col justify-between">
+    <div className="bg-black h-screen w-full flex flex-col justify-between">
       <Section1 />
       <Section2 />
     </div>
@@ -14,20 +14,20 @@ export default function FooterContent() {
 
 const Section1 = () => {
   return (
-    <div className="flex justify-center">
-      <div>
+    <div className="flex justify-center items-center flex-grow">
+      <div className="text-center">
         <TextReveal>
-          <h1 className="text-4xl my-2 font-bold tracking-tight text-white sm:text-6xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
             I love to code!
           </h1>
         </TextReveal>
         <TextReveal>
-          <h1 className="text-4xl my-2 font-bold tracking-tight text-white sm:text-6xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4">
             I love to design!
           </h1>
         </TextReveal>
         <TextReveal>
-          <h1 className="text-4xl my-2 font-bold tracking-tight text-white sm:text-6xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white">
             I love to create!
           </h1>
         </TextReveal>
@@ -38,90 +38,22 @@ const Section1 = () => {
 
 const Section2 = () => {
   return (
-    <div className="mt-auto flex w-full justify-center">
-      <div className="flex items-center justify-center border-2 -translate-y-10">
-        <AnimatedText
-          el="h2"
-          text={["FRONTEND"]}
-          className="text-[200px] bg-white text-black font-black pl-14 w-full text-center"
-        />
-      </div>
-
-      {/* <img
-        src="/logo.svg"
-        alt="ninja"
-        width={400}
-        height={0}
-        className="-translate-x-[20vw] top-[10vh]"
-      /> */}
-    </div>
-  )
-}
-
-const Nav = () => {
-  return (
-    <div className="flex gap-40">
-      <div className="flex flex-col gap-2">
-        <h3 className="mb-2 uppercase text-[#ffffff80]">Skills</h3>
-        <AnimatedText
-          el="h2"
-          text={["Javascript"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-        <AnimatedText
-          el="h2"
-          text={["Typescript"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-        <AnimatedText
-          el="h2"
-          text={["Animation"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-        <AnimatedText
-          el="h2"
-          text={["React"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <h3 className="mb-2 uppercase text-[#ffffff80]">Others</h3>
-        <AnimatedText
-          el="h2"
-          text={["Framer Motion"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-        <AnimatedText
-          el="h2"
-          text={["Python"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-        <AnimatedText
-          el="h2"
-          text={["CSS"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-        <AnimatedText
-          el="h2"
-          text={["HTML"]}
-          className="translate-y-[0vh]  top-[10vh]"
-        />
-      </div>
+    <div className="flex justify-center items-center lg:mb-44">
+      <AnimatedText
+        el="h2"
+        text={["FRONTEND"]}
+        className="text-6xl sm:text-8xl md:text-9xl bg-white text-black font-black px-6 py-2 rounded-md"
+      />
     </div>
   )
 }
 
 const defaultAnimations = {
-  hidden: {
-    opacity: 0,
-    y: "20px",
-  },
+  hidden: { opacity: 0, y: "20px" },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.2,
-    },
+    transition: { duration: 0.2 },
   },
 }
 
@@ -129,38 +61,22 @@ export const AnimatedText = ({
   text,
   el: Wrapper = "p",
   className,
-  once,
+  once = true,
   repeatDelay,
   animation = defaultAnimations,
 }) => {
   const controls = useAnimation()
   const textArray = Array.isArray(text) ? text : [text]
   const ref = useRef(null)
-  const isInView = useInView(ref, {
-    amount: 1,
-    once,
-    margin: "", // Adjust the margin
-  })
+  const isInView = useInView(ref, { amount: 0.5, once })
 
   useEffect(() => {
-    const show = () => {
-      controls.start("visible")
-      if (repeatDelay) {
-        setTimeout(async () => {
-          await controls.start("hidden")
-          controls.start("visible")
-        }, repeatDelay)
-      }
-    }
-
     if (isInView) {
-      show()
+      controls.start("visible")
     } else {
       controls.start("hidden")
     }
-
-    return () => clearTimeout()
-  }, [isInView])
+  }, [isInView, controls])
 
   return (
     <Wrapper className={className}>
@@ -173,22 +89,21 @@ export const AnimatedText = ({
           visible: { transition: { staggerChildren: 0.02 } },
           hidden: {},
         }}
-        aria-hidden
+        aria-hidden="true"
       >
         {textArray.map((line, lineIndex) => (
-          <span className="block" key={`${line}-${lineIndex}`}>
+          <span className="block" key={`line-${lineIndex}`}>
             {line.split(" ").map((word, wordIndex) => (
-              <span className="inline-block" key={`${word}-${wordIndex}`}>
+              <span className="inline-block mr-1" key={`word-${wordIndex}`}>
                 {word.split("").map((char, charIndex) => (
                   <motion.span
-                    key={`${char}-${charIndex}`}
+                    key={`char-${charIndex}`}
                     className="inline-block"
                     variants={animation}
                   >
                     {char}
                   </motion.span>
                 ))}
-                <span className="inline-block">&nbsp;</span>
               </span>
             ))}
           </span>
